@@ -3,7 +3,6 @@
 var	NodeBB = require('./lib/nodebb'),
 	Config = require('./lib/config'),
 	Sockets = require('./lib/sockets'),
-	Commands = require('./lib/commands'),
 
 	app,
 
@@ -41,20 +40,22 @@ Shoutbox.init.load = function(params, callback) {
 	Config.init(callback);
 };
 
-Shoutbox.init.addGlobalNavigation = function(header, callback) {
-	if (Config.global.get('toggles.headerLink')) {
-		header.navigation.push({
-			class: '',
-			iconClass: 'fa fa-fw ' + Config.plugin.icon,
-			route: '/' + Config.plugin.id,
-			text: Config.plugin.name
-		});
-	}
+Shoutbox.init.addGlobalNavigation = function(menu, callback) {
+	menu = menu.concat([
+        {
+            route: '/' + Config.plugin.id,
+            title: Config.plugin.name,
+            iconClass: 'fa fa-fw ' + Config.plugin.icon,
+            textClass: "visible-xs-inline",
+            text: Config.plugin.name
+        }
+    ]);
 
-	callback(null, header);
+    callback(null, menu);
 };
 
 Shoutbox.init.addAdminNavigation = function(header, callback) {
+	console.log("addAdminNavigation test");
 	header.plugins.push({
 		route: '/plugins/' + Config.plugin.id,
 		icon: Config.plugin.icon,
@@ -76,7 +77,6 @@ Shoutbox.widget.define = function(widgets, callback) {
 };
 
 Shoutbox.widget.render = function(widget, callback) {
-	//Remove any container
 	widget.data.container = '';
 
 	Config.user.get({ uid: widget.uid, settings: {} }, function(err, result) {
@@ -86,8 +86,11 @@ Shoutbox.widget.render = function(widget, callback) {
 			if (!err && result && result.settings && parseInt(result.settings['shoutbox:toggles:hide'], 10) == 1) {
 				data.hiddenStyle = 'display: none;';
 			}
-
-			app.render('shoutbox/panel', data, callback);
+			console.log(data);
+			app.render('shoutbox/panel', data, function(err, html) {
+				widget.html = html;
+				callback(err, widget);
+			});
 		});
 	});
 };
