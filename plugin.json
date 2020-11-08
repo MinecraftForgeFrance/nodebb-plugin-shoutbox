@@ -45,5 +45,6 @@
       "shoutbox-notification": "shoutbox-notification.mp3"
     }
   },
-  "templates": "./public/templates"
+  "templates": "./public/templates",
+  "languages": "languages"
 }

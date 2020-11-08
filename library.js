@@ -55,7 +55,6 @@ Shoutbox.init.addGlobalNavigation = function(menu, callback) {
 };
 
 Shoutbox.init.addAdminNavigation = function(header, callback) {
-	console.log("addAdminNavigation test");
 	header.plugins.push({
 		route: '/plugins/' + Config.plugin.id,
 		icon: Config.plugin.icon,
@@ -86,7 +85,6 @@ Shoutbox.widget.render = function(widget, callback) {
 			if (!err && result && result.settings && parseInt(result.settings['shoutbox:toggles:hide'], 10) == 1) {
 				data.hiddenStyle = 'display: none;';
 			}
-			console.log(data);
 			app.render('shoutbox/panel', data, function(err, html) {
 				widget.html = html;
 				callback(err, widget);
